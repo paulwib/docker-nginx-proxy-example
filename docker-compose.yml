@@ -1,0 +1,31 @@
+version: '2'
+services:
+  upstream0:
+    build: .
+    environment:
+      NETWORK_ACCESS: internal
+      VIRTUAL_HOST: nginx-proxy.test
+
+  upstream1:
+    image: jwilder/whoami
+    environment:
+      NETWORK_ACCESS: internal
+      VIRTUAL_HOST: nginx-proxy.test
+      VIRTUAL_PATH: /1
+
+  upstream2:
+    image: jwilder/whoami
+    environment:
+      NETWORK_ACCESS: internal
+      VIRTUAL_HOST: nginx-proxy.test
+      VIRTUAL_PATH: /2
+
+  # Nginx proxy for SSL termination of virtual host
+  nginx-proxy:
+    image: christhomas/nginx-proxy:alpine
+    volumes:
+      - ./certs:/etc/nginx/certs
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    ports:
+      - 80:80
+      - 443:443

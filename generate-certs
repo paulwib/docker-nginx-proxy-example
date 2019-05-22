@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+# generate a self-signed certificate for testing, requires openssl > v1.1.1
+dir=certs
+host=nginx-proxy.test
+
+mkdir -p $dir
+openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes -keyout ${dir}/${host}.key -out ${dir}/${host}.crt -subj /CN=${host}
